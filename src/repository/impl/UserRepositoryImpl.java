@@ -104,6 +104,72 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getByUsername(String username) {
+
+        User foundUser = new User();
+
+        File userDatabase = new File("user_database.txt");
+
+        Scanner userDatabaseReader;
+
+        try {
+
+            userDatabaseReader = new Scanner(userDatabase);
+
+        } catch (FileNotFoundException e) {
+
+            System.out.println("database file not found");
+
+            return null;
+
+        }
+
+        boolean foundFlag = false;
+
+        while (userDatabaseReader.hasNextLine()) {
+
+            String input = userDatabaseReader.nextLine();
+
+            String[] token = input.split(" ");
+
+            if (token[1].equals(username)) {
+
+                foundUser.setUsername(token[1]);
+
+                token = input.split("-");
+
+                foundUser.setId(Long.parseLong(token[0]));
+
+                token = input.split("[( ]");
+
+                foundUser.setFirstname(token[3]);
+
+                token = input.split("[ )]");
+
+                foundUser.setLastname(token[3]);
+
+                foundFlag = true;
+
+            }
+
+            if (foundFlag)
+                break;
+
+        }
+
+        userDatabaseReader.close();
+
+        if (!foundFlag) {
+
+            System.out.println("this user does not exist");
+
+        }
+
+        return foundUser;
+
+    }
+
+    @Override
     public void delete(User user) {
 
         File userDatabase = new File("user_database.txt");

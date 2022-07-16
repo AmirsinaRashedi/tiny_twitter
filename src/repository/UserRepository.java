@@ -10,6 +10,8 @@ public interface UserRepository {
 
     void readAll();
 
+    User getByUsername(String username);
+
     void delete(User user);
 
     void update(User user);
